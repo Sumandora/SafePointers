@@ -1,9 +1,18 @@
 cmake_minimum_required(VERSION 3.20)
+
+if(TARGET SafePointer)
+	return()
+endif()
+
 project(SafePointer)
 
-set(CMAKE_CXX_STANDARD 23)
-set(CMAKE_POSITION_INDEPENDENT_CODE ON)
-set(CMAKE_CXX_FLAGS "-ggdb3")
+add_library(SafePointer INTERFACE)
+target_include_directories(SafePointer INTERFACE "${PROJECT_SOURCE_DIR}/Include")
 
-add_executable(SafePointer Example/Main.cpp)
-target_include_directories(SafePointer PRIVATE Include)
+if(PROJECT_IS_TOP_LEVEL)
+	add_executable(SafePointerExample "${PROJECT_SOURCE_DIR}/Example/Main.cpp")
+	target_link_libraries(SafePointerExample PRIVATE SafePointer)
+
+	enable_testing()
+	add_test(NAME SafePointerExample COMMAND $<TARGET_FILE:SafePointerExample>)
+endif()
