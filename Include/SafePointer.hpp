@@ -29,7 +29,8 @@ namespace SafePointers {
 				std::uintptr_t begin = std::stoull(line.substr(0, dash), 0, 16);
 				std::uintptr_t end = std::stoull(line.substr(dash + 1, to), 0, 16);
 
-				if (begin < uintptr && uintptr < end) {
+				 // If the pointer lies between 2 pages something has clearly gone wrong, so I won't be handling that here
+				if (begin <= uintptr && uintptr + sizeof(void*) < end) {
 					return true;
 				}
 			}
